@@ -6,4 +6,9 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
+
+  def handle_event("set_open_insert_dialog", _params, socket) do
+    IO.inspect("handle event works")
+    {:noreply, socket}
+  end
 end
