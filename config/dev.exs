@@ -54,11 +54,12 @@ config :elastic_search, ElasticSearchWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :elastic_search, ElasticSearchWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :app, :surface],
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/elastic_search_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/elastic_search_web/(controllers|live|components)/.*(ex|heex|sface|js)$"
     ]
   ]
 

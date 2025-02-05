@@ -1,0 +1,1 @@
+<Button class="mb-3" variant="outline" on_click="set_open_insert_dialog">Insert new data</Button>

@@ -9,7 +9,8 @@ defmodule ElasticSearch.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      compilers: Mix.compilers() ++ [:surface]
     ]
   end
 
@@ -57,7 +58,8 @@ defmodule ElasticSearch.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.2"}
+      {:bandit, "~> 1.2"},
+      {:moon, git: "https://github.com/coingaming/moon.git"}
     ]
   end
 
@@ -69,17 +71,16 @@ defmodule ElasticSearch.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind elastic_search", "esbuild elastic_search"],
+      setup: ["deps.get", "assets.setup", "assets.build", "ecto.reset"],
+      "assets.build": ["cmd --cd assets npm run build", "esbuild default"],
+      "assets.setup": ["cmd --cd assets npm i", "cmd --cd deps/moon/assets npm i", "esbuild.install --if-missing"],
       "assets.deploy": [
-        "tailwind elastic_search --minify",
-        "esbuild elastic_search --minify",
-        "phx.digest"
-      ]
+        "assets.setup",
+        "assets.build",
+        "cmd --cd assets npm run deploy",
+        "esbuild default --minify",
+        "phx.digest"],
+      "ecto.reset": ["ecto.drop", "ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"]
     ]
   end
 end

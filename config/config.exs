@@ -32,11 +32,20 @@ config :elastic_search, ElasticSearchWeb.Endpoint,
 config :elastic_search, ElasticSearch.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
+moon_config_path = "#{File.cwd!()}/deps/moon/config/surface.exs"
+
+if File.exists?("#{moon_config_path}") do
+  import_config(moon_config_path)
+end
+
+config :surface, :components, [
+  # put here your app configs for surface
+]
+
 config :esbuild,
   version: "0.17.11",
   elastic_search: [
-    args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
