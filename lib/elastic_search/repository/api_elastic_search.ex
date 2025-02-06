@@ -40,4 +40,16 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
   def clear_elastic_search() do
     Tesla.delete(client(), @index_name)
   end
+
+  def update_field_elastic_search(id, attrs) do
+    request_body = [%{
+      doc: attrs
+    } |> Jason.encode!()]
+
+    Tesla.post(client(), "#{@index_name}/_update/#{id}", request_body)
+  end
+
+  def delete_field_elastic_search(id) do
+    Tesla.delete(client(), "#{@index_name}/_doc/#{id}")
+  end
 end

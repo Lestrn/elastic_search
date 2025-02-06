@@ -20,4 +20,8 @@ defmodule ElasticSearch.Schemas.ElasticSearchIndex do
 
     Index.create(MySuperApp.ElasticsearchCluster, @index_name, articles)
   end
+
+  def update() do
+   
+  end
 end
