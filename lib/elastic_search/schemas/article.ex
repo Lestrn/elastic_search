@@ -23,7 +23,7 @@ defmodule ElasticSearch.Schemas.Article do
       |> validate_required([:author_name, :status, :tags, :label])
     end
 
-    defp maybe_validate(false, article, attrs) do
+    defp maybe_validate(false, article, _attrs) do
       article
     end
 end

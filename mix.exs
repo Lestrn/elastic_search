@@ -59,7 +59,11 @@ defmodule ElasticSearch.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
-      {:moon, git: "https://github.com/coingaming/moon.git"}
+      {:moon, git: "https://github.com/coingaming/moon.git"},
+      {:elasticsearch, "~> 1.0"},
+      {:hackney, "~> 1.18"},
+      {:faker, "~> 0.17"},
+      {:tesla, "~> 1.5"}
     ]
   end
 

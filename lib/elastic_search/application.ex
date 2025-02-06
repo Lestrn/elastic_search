@@ -17,7 +17,9 @@ defmodule ElasticSearch.Application do
       # Start a worker by calling: ElasticSearch.Worker.start_link(arg)
       # {ElasticSearch.Worker, arg},
       # Start to serve requests, typically the last entry
-      ElasticSearchWeb.Endpoint
+      ElasticSearchWeb.Endpoint,
+      #For elastic search
+      ElasticSearch.ElasticsearchCluster
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

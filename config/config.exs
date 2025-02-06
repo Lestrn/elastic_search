@@ -22,6 +22,12 @@ config :elastic_search, ElasticSearchWeb.Endpoint,
   pubsub_server: ElasticSearch.PubSub,
   live_view: [signing_salt: "w4LDgmSn"]
 
+config :elastic_search, ElasticSearch.ElasticsearchCluster,
+  # Change if running remotely
+  url: "http://localhost:9200",
+  api: Elasticsearch.API.HTTP,
+  json_library: Jason
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
