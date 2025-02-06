@@ -36,4 +36,8 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
 
     Tesla.post(client(), "#{@index_name}/_bulk", bulk_data)
   end
+
+  def clear_elastic_search() do
+    Tesla.delete(client(), @index_name)
+  end
 end

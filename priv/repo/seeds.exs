@@ -11,8 +11,10 @@
 # and so on) as they will fail if something goes wrong.
 alias ElasticSearch.Repo
 alias ElasticSearch.Schemas.Article
+alias ElasticSearch.Repository.ApiElasticSearch
 
-# Generate 10 random articles
+Repo.delete_all(Article)
+
 for _ <- 1..100 do
   article = %Article{
     author_name: Faker.Person.name(),
@@ -23,3 +25,6 @@ for _ <- 1..100 do
 
   Repo.insert!(article)
 end
+
+ApiElasticSearch.clear_elastic_search()
+ApiElasticSearch.bulk_index_articles()
