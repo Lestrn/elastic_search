@@ -71,7 +71,7 @@ defmodule ElasticSearch.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build", "ecto.reset"],
+      setup: ["deps.get", "ecto.reset", "assets.setup", "assets.build"],
       "assets.build": ["cmd --cd assets npm run build", "esbuild default"],
       "assets.setup": ["cmd --cd assets npm i", "cmd --cd deps/moon/assets npm i", "esbuild.install --if-missing"],
       "assets.deploy": [

@@ -6,7 +6,7 @@ config :elastic_search, ElasticSearch.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "elastic_search_dev",
-  port: 5434,
+  port: 5430,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
