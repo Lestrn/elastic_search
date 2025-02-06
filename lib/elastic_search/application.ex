@@ -18,8 +18,6 @@ defmodule ElasticSearch.Application do
       # {ElasticSearch.Worker, arg},
       # Start to serve requests, typically the last entry
       ElasticSearchWeb.Endpoint,
-      #For elastic search
-      ElasticSearch.ElasticsearchCluster
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

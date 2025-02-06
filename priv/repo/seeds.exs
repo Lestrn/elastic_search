@@ -27,4 +27,5 @@ for _ <- 1..100 do
 end
 
 ApiElasticSearch.clear_elastic_search()
+ApiElasticSearch.maybe_create_index()
 ApiElasticSearch.bulk_index_articles()
