@@ -7,6 +7,10 @@ defmodule ElasticSearch.Repository.ArticleRepository do
     Repo.all(Article)
   end
 
+  def get_article_by_id(id) do
+    Repo.get(Article, id)
+  end
+
   def create_article(attrs) do
     %Article{}
     |> Article.changeset(attrs, true)
