@@ -11,6 +11,10 @@ defmodule ElasticSearch.Repository.ArticleRepository do
     %Article{}
     |> Article.changeset(attrs, true)
     |> Repo.insert()
+    |> case do
+      {:ok, article} -> ApiElasticSearch.create_field_elastic_search(article.id, attrs)
+      {:error, changeset} -> {:error, changeset}
+    end
   end
 
   def update_article(article_id, attrs) do
