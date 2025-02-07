@@ -1,13 +1,15 @@
 defmodule ElasticSearchWeb.PageHtml.TablePage do
   @moduledoc false
   use ElasticSearchWeb, :surface_live_view
-  alias Moon.Design.{Modal, Form, Form.Field, Form.Input, Button, Table, Table.Column}
+  alias Moon.Design.{Modal, Form, Form.Field, Form.Input, Button, Table, Table.Column, Search}
 
   alias ElasticSearch.Schemas.Article
   alias ElasticSearch.Repository.ArticleRepository
 
   data(keep_insert_dialog_open, :boolean, default: false)
   data(keep_change_dialog_open, :boolean, default: false)
+  data(author_name_filter, :string, default: "")
+  data(tag_filter, :string, default: "")
 
   data(status_options, :list,
     default: [%{key: "Published", value: true}, %{key: "Unpublished", value: false}]
@@ -21,6 +23,14 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
     {:ok,
      socket
      |> fetch_articles()}
+  end
+
+  def handle_event("change_author_name_filter", _, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("change_tag_filter", _, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("set_open_insert_dialog", _, socket) do
