@@ -1,7 +1,7 @@
 # ElasticSearch
 
 To start your Phoenix server:
-
+  * Run `docker compose up` to start db and elastic search
   * Run `mix setup` to install and setup dependencies
   * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
@@ -16,3 +16,5 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+
+  https://github.com/user-attachments/assets/bcee870a-7f89-4720-9471-8112947c5414

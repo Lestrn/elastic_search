@@ -20,7 +20,7 @@ for _ <- 1..100 do
     author_name: Faker.Person.name(),
     status: Enum.random([true, false]),
     tags: Enum.join(Faker.Lorem.words(3), ", "),
-    label: Faker.Lorem.sentence(2)
+    label: "(url)"
   }
 
   Repo.insert!(article)
