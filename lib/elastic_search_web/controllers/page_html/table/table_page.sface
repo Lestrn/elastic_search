@@ -44,7 +44,7 @@
             <Input placeholder="Author name" />
           </Field>
           <Field field={:status} label="Status">
-            <Form.Dropdown options={@gender_options} prompt="Please select gender" />
+            <Form.Dropdown options={@status_options} prompt="Please select status" />
           </Field>
           <Field field={:tags} label="Tags">
             <Input placeholder="Tags" />
@@ -82,7 +82,7 @@
             <Input placeholder="Author name" />
         </Field>
       <Field field={:status} label="Status">
-        <Form.Dropdown options={@gender_options} prompt="Please select gender" />
+        <Form.Dropdown options={@status_options} prompt="Please select status" />
       </Field>
         <Field field={:tags} label="Tags">
             <Input placeholder="Tags" />

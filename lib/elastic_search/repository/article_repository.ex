@@ -2,10 +2,14 @@ defmodule ElasticSearch.Repository.ArticleRepository do
   alias ElasticSearch.Schemas.Article
   alias ElasticSearch.Repo
   alias ElasticSearch.Repository.ApiElasticSearch
+  import Ecto.Query
 
   def fetch_articles() do
-    Repo.all(Article)
+    Article
+    |> order_by(desc: :updated_at)
+    |> Repo.all()
   end
+
 
   def get_article_by_id(id) do
     Repo.get(Article, id)

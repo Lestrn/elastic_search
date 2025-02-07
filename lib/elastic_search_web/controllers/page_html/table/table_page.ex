@@ -8,7 +8,11 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
 
   data(keep_insert_dialog_open, :boolean, default: false)
   data(keep_change_dialog_open, :boolean, default: false)
-  data(gender_options, :list, default: [%{key: "Published", value: true}, %{key: "Unpublished", value: false}])
+
+  data(status_options, :list,
+    default: [%{key: "Published", value: true}, %{key: "Unpublished", value: false}]
+  )
+
   data(form_insert_changeset, :any, default: nil)
 
   data(form_change_changeset, :any, default: nil)
@@ -62,13 +66,14 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
         },
         socket
       ) do
+
     {:noreply,
      socket
      |> assign(
        form_insert_changeset:
          socket.assigns.form_insert_changeset.data
          |> Article.changeset(
-           %{author_name: author_name, status: status, tags: tags, label: label},
+           %{author_name: author_name, status: status |> string_to_boolean(), tags: tags, label: label},
            false
          )
          |> Map.put(:action, :insert)
@@ -143,7 +148,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
        form_change_changeset:
          socket.assigns.form_change_changeset.data
          |> Article.changeset(
-           %{author_name: author_name, status: status, tags: tags, label: label},
+           %{author_name: author_name, status: status |> string_to_boolean(), tags: tags, label: label},
            false
          )
          |> Map.put(:action, :insert)
@@ -199,7 +204,6 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
 
     {:noreply,
      socket
-     |> assign(keep_change_dialog_open: false)
      |> fetch_articles()}
   end
 
@@ -248,4 +252,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
         ArticleRepository.fetch_articles() |> Enum.map(fn struct -> Map.from_struct(struct) end)
     )
   end
+
+  def string_to_boolean("true"), do: true
+  def string_to_boolean("false"), do: false
 end
