@@ -1,8 +1,5 @@
 <Button class="mb-3" variant="outline" on_click="set_open_insert_dialog">Insert new data</Button>
-{#for field <- @fields}
-<p> {field.id} </p>
-{/for}
-<!-- <Table id="redis-table" items={field <- @fields} is_zebra_style row_gap="border-spacing-y-1">
+<Table items={field <- @fields} is_zebra_style row_gap="border-spacing-y-1">
   <Column name="author_name" label="Author name">
     {field.author_name}
   </Column>
@@ -22,7 +19,7 @@
     {field.updated_at}
   </Column>
   <Column label="Change"><Button value={field.id} on_click="set_open_change_dialog">Change</Button></Column>
-</Table>  -->
+</Table> 
  {#if @keep_insert_dialog_open}
   <Modal id="insert_modal" is_open={@keep_insert_dialog_open}>
     <Modal.Backdrop />

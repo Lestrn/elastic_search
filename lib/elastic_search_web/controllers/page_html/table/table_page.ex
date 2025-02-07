@@ -16,7 +16,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(fields: ArticleRepository.fetch_articles())}
+     |> assign(fields: ArticleRepository.fetch_articles() |> Enum.map(fn struct -> Map.from_struct(struct) end))}
   end
 
   def handle_event("set_open_insert_dialog", _, socket) do
@@ -37,6 +37,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
 
   def handle_event("set_close_insert_dialog", _, socket) do
     Modal.close("insert_modal")
+    Modal.close("change_modal")
 
     {:noreply,
      socket
@@ -102,7 +103,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
     end
   end
 
-  def handle_event("set_open_change_dialog", %{"id" => id}, socket) do
+  def handle_event("set_open_change_dialog", %{"value" => id}, socket) do
     Modal.open("change_modal")
     opened_article = ArticleRepository.get_article_by_id(id)
     {:noreply,
