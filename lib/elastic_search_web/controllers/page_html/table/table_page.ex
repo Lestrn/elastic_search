@@ -28,7 +28,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
      |> assign(
        form_insert_changeset:
          Article.changeset(
-           %Article{author_name: nil, status: nil, tags: nil, label: nil},
+           %Article{author_name: nil, status: false, tags: nil, label: nil},
            %{},
            false
          )
@@ -43,7 +43,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
      |> assign(
        form_insert_changeset:
          Article.changeset(
-           %Article{author_name: nil, status: nil, tags: nil, label: nil},
+           %Article{author_name: nil, status: false, tags: nil, label: nil},
            %{},
            false
          )
