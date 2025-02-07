@@ -1,5 +1,8 @@
 <Button class="mb-3" variant="outline" on_click="set_open_insert_dialog">Insert new data</Button>
 <Table items={field <- @fields} is_zebra_style row_gap="border-spacing-y-1">
+  <Column name="id" label="Id">
+    {field.id}
+  </Column>
   <Column name="author_name" label="Author name">
     {field.author_name}
   </Column>
@@ -26,7 +29,7 @@
     <Modal.Panel>
       <div class="p-4 border-b-2 border-beerus">
         <h3 class="text-moon-18 text-bulma font-medium">
-          Add new field to redis
+          Add new field to article
         </h3>
       </div>
       <div class="px-6 py-4">

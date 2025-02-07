@@ -16,7 +16,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(fields: ArticleRepository.fetch_articles() |> Enum.map(fn struct -> Map.from_struct(struct) end))}
+     |> fetch_articles()}
   end
 
   def handle_event("set_open_insert_dialog", _, socket) do
@@ -90,7 +90,8 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
         socket
       ) do
     validated_changeset =
-      Article.changeset(%Article{author_name: nil, status: nil, tags: nil, label: nil},
+      Article.changeset(
+        %Article{author_name: nil, status: nil, tags: nil, label: nil},
         %{author_name: author_name, status: status, tags: tags, label: label},
         true
       )
@@ -106,12 +107,19 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   def handle_event("set_open_change_dialog", %{"value" => id}, socket) do
     Modal.open("change_modal")
     opened_article = ArticleRepository.get_article_by_id(id)
+
     {:noreply,
      socket
      |> assign(
        form_change_changeset:
          Article.changeset(
-           %Article{author_name: opened_article.author_name, status: opened_article.status, tags: opened_article.tags, label: opened_article.label}, %{},
+           %Article{
+             author_name: opened_article.author_name,
+             status: opened_article.status,
+             tags: opened_article.tags,
+             label: opened_article.label
+           },
+           %{},
            false
          )
      )
@@ -136,7 +144,10 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
      |> assign(
        form_change_changeset:
          socket.assigns.form_change_changeset.data
-         |> Article.changeset(%{author_name: author_name, status: status, tags: tags, label: label}, false)
+         |> Article.changeset(
+           %{author_name: author_name, status: status, tags: tags, label: label},
+           false
+         )
          |> Map.put(:action, :insert)
      )}
   end
@@ -148,7 +159,11 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
      socket
      |> assign(
        form_change_changeset:
-         Article.changeset(%Article{author_name: nil, status: nil, tags: nil, label: nil}, %{}, false)
+         Article.changeset(
+           %Article{author_name: nil, status: nil, tags: nil, label: nil},
+           %{},
+           false
+         )
      )
      |> assign(keep_change_dialog_open: false)}
   end
@@ -188,19 +203,25 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
     {:noreply,
      socket
      |> assign(keep_change_dialog_open: false)
-     |> assign(fields: ArticleRepository.fetch_articles())}
+     |> fetch_articles()}
   end
 
   defp submit_add(author_name, status, tags, label, socket) do
     Modal.close("insert_modal")
-    ArticleRepository.create_article(%{author_name: author_name, status: status, tags: tags, label: label})
+
+    ArticleRepository.create_article(%{
+      author_name: author_name,
+      status: status,
+      tags: tags,
+      label: label
+    })
 
     socket
     # |> assign(
     #   form_insert_changeset: Article.changeset(%Article{author_name: author_name, status: status, tags: tags, label: label}, %{}, false)
     # )
     |> assign(keep_insert_dialog_open: false)
-    |> assign(fields: ArticleRepository.fetch_articles())
+    |> fetch_articles()
   end
 
   defp cancel_add(validated_changeset, socket) do
@@ -211,15 +232,28 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   defp submit_update(author_name, status, tags, label, socket) do
     Modal.close("change_modal")
 
-    ArticleRepository.update_article(socket.assigns.id_to_change, %{author_name: author_name, status: status, tags: tags, label: label})
+    ArticleRepository.update_article(socket.assigns.id_to_change, %{
+      author_name: author_name,
+      status: status,
+      tags: tags,
+      label: label
+    })
 
     socket
     |> assign(keep_change_dialog_open: false)
-    |> assign(fields: ArticleRepository.fetch_articles())
+    |> fetch_articles()
   end
 
   defp cancel_update(validated_changeset, socket) do
     socket
     |> assign(form_change_changeset: validated_changeset)
+  end
+
+  defp fetch_articles(socket) do
+    socket
+    |> assign(
+      fields:
+        ArticleRepository.fetch_articles() |> Enum.map(fn struct -> Map.from_struct(struct) end)
+    )
   end
 end
