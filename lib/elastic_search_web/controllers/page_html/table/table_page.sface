@@ -7,7 +7,7 @@
     {field.author_name}
   </Column>
   <Column name="status" label="Status">
-    {field.status}
+    {field.status && "Published" || "Unpublished"}
   </Column>
   <Column name="tags" label="Tags">
     {field.tags}
@@ -44,7 +44,7 @@
             <Input placeholder="Author name" />
           </Field>
           <Field field={:status} label="Status">
-            <Input placeholder="Status" />
+            <Form.Dropdown options={@gender_options} prompt="Please select gender" />
           </Field>
           <Field field={:tags} label="Tags">
             <Input placeholder="Tags" />
@@ -81,9 +81,9 @@
         <Field field={:author_name} label="Author name">
             <Input placeholder="Author name" />
         </Field>
-        <Field field={:status} label="Status">
-          <Input placeholder="Status" />
-        </Field>
+      <Field field={:status} label="Status">
+        <Form.Dropdown options={@gender_options} prompt="Please select gender" />
+      </Field>
         <Field field={:tags} label="Tags">
             <Input placeholder="Tags" />
         </Field>

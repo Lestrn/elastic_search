@@ -8,7 +8,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
 
   data(keep_insert_dialog_open, :boolean, default: false)
   data(keep_change_dialog_open, :boolean, default: false)
-
+  data(gender_options, :list, default: [%{key: "Published", value: true}, %{key: "Unpublished", value: false}])
   data(form_insert_changeset, :any, default: nil)
 
   data(form_change_changeset, :any, default: nil)
