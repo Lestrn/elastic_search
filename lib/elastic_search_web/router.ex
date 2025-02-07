@@ -17,7 +17,7 @@ defmodule ElasticSearchWeb.Router do
   scope "/", ElasticSearchWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", RedirectController, :to_table
     live("/table", PageHtml.TablePage)
   end
 
