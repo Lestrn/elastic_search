@@ -37,7 +37,6 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
 
   def handle_event("set_close_insert_dialog", _, socket) do
     Modal.close("insert_modal")
-    Modal.close("change_modal")
 
     {:noreply,
      socket
@@ -48,8 +47,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
            %{},
            false
          )
-     )
-     |> assign(keep_insert_dialog_open: false)}
+     )}
   end
 
   def handle_event(
@@ -164,8 +162,7 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
            %{},
            false
          )
-     )
-     |> assign(keep_change_dialog_open: false)}
+     )}
   end
 
   def handle_event(
@@ -217,10 +214,6 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
     })
 
     socket
-    # |> assign(
-    #   form_insert_changeset: Article.changeset(%Article{author_name: author_name, status: status, tags: tags, label: label}, %{}, false)
-    # )
-    |> assign(keep_insert_dialog_open: false)
     |> fetch_articles()
   end
 
@@ -230,8 +223,6 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
   end
 
   defp submit_update(author_name, status, tags, label, socket) do
-    Modal.close("change_modal")
-
     ArticleRepository.update_article(socket.assigns.id_to_change, %{
       author_name: author_name,
       status: status,
@@ -239,8 +230,9 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
       label: label
     })
 
+    Modal.close("change_modal")
+
     socket
-    |> assign(keep_change_dialog_open: false)
     |> fetch_articles()
   end
 
