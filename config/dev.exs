@@ -6,6 +6,7 @@ config :elastic_search, ElasticSearch.Repo,
   password: "postgres",
   hostname: "localhost",
   database: "elastic_search_dev",
+  port: 5430,
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -54,11 +55,12 @@ config :elastic_search, ElasticSearchWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :elastic_search, ElasticSearchWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :app, :surface],
   live_reload: [
     patterns: [
       ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/elastic_search_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/elastic_search_web/(controllers|live|components)/.*(ex|heex|sface|js)$"
     ]
   ]
 

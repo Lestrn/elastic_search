@@ -21,11 +21,18 @@ import "phoenix_html"
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import Hooks from "./_hooks"
+
+
+// the next line should be added
+import MoonHooks from "../../deps/moon/assets/js/hooks"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+
 let liveSocket = new LiveSocket("/live", Socket, {
-  longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken}
+    longPollFallbackMs: 2500,
+    params: {_csrf_token: csrfToken},
+    hooks: {...MoonHooks, ...Hooks}
 })
 
 // Show progress bar on live navigation and form submits

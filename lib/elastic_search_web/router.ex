@@ -18,6 +18,7 @@ defmodule ElasticSearchWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live("/table", PageHtml.TablePage)
   end
 
   # Other scopes may use custom stacks.
