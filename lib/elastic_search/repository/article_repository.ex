@@ -58,4 +58,18 @@ defmodule ElasticSearch.Repository.ArticleRepository do
         end
     end
   end
+
+  def fetch_by_search("", "") do
+    fetch_articles()
+  end
+
+  def fetch_by_search(author_name, tags) do
+    tags_query = if tags == "", do: "*", else: "#{tags}"
+    author_name_query = if author_name == "", do: "*", else: "#{author_name}"
+    ids = ApiElasticSearch.search(author_name_query, tags_query)
+
+    from(a in Article, where: a.id in ^ids)
+    |> Repo.all()
+  end
+
 end

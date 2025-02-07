@@ -1,7 +1,18 @@
 defmodule ElasticSearchWeb.PageHtml.TablePage do
   @moduledoc false
   use ElasticSearchWeb, :surface_live_view
-  alias Moon.Design.{Modal, Form, Form.Field, Form.Input, Button, Table, Table.Column, Search, Dropdown}
+
+  alias Moon.Design.{
+    Modal,
+    Form,
+    Form.Field,
+    Form.Input,
+    Button,
+    Table,
+    Table.Column,
+    Search,
+    Dropdown
+  }
 
   alias ElasticSearch.Schemas.Article
   alias ElasticSearch.Repository.ArticleRepository
@@ -25,12 +36,26 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
      |> fetch_articles()}
   end
 
-  def handle_event("change_author_name_filter", _, socket) do
-    {:noreply, socket}
+  def handle_event("change_author_name_filter", %{"value" => author_name_filter}, socket) do
+    {:noreply,
+     socket
+     |> assign(author_name_filter: author_name_filter)
+     |> assign(
+       fields:
+         ArticleRepository.fetch_by_search(author_name_filter, socket.assigns.tag_filter)
+         |> Enum.map(fn struct -> Map.from_struct(struct) end)
+     )}
   end
 
-  def handle_event("change_tag_filter", _, socket) do
-    {:noreply, socket}
+  def handle_event("change_tag_filter", %{"value" => tag_filter}, socket) do
+    {:noreply,
+     socket
+     |> assign(tag_filter: tag_filter)
+     |> assign(
+       fields:
+         ArticleRepository.fetch_by_search(socket.assigns.author_name_filter, tag_filter)
+         |> Enum.map(fn struct -> Map.from_struct(struct) end)
+     )}
   end
 
   def handle_event("set_open_insert_dialog", _, socket) do
@@ -76,14 +101,18 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
         },
         socket
       ) do
-
     {:noreply,
      socket
      |> assign(
        form_insert_changeset:
          socket.assigns.form_insert_changeset.data
          |> Article.changeset(
-           %{author_name: author_name, status: status |> string_to_boolean(), tags: tags, label: label},
+           %{
+             author_name: author_name,
+             status: status |> string_to_boolean(),
+             tags: tags,
+             label: label
+           },
            false
          )
          |> Map.put(:action, :insert)
@@ -158,7 +187,12 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
        form_change_changeset:
          socket.assigns.form_change_changeset.data
          |> Article.changeset(
-           %{author_name: author_name, status: status |> string_to_boolean(), tags: tags, label: label},
+           %{
+             author_name: author_name,
+             status: status |> string_to_boolean(),
+             tags: tags,
+             label: label
+           },
            false
          )
          |> Map.put(:action, :insert)
@@ -259,7 +293,11 @@ defmodule ElasticSearchWeb.PageHtml.TablePage do
     socket
     |> assign(
       fields:
-        ArticleRepository.fetch_articles() |> Enum.map(fn struct -> Map.from_struct(struct) end)
+        ArticleRepository.fetch_by_search(
+          socket.assigns.author_name_filter,
+          socket.assigns.tag_filter
+        )
+        |> Enum.map(fn struct -> Map.from_struct(struct) end)
     )
   end
 

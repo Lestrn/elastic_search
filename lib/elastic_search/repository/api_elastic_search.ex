@@ -90,4 +90,14 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
   def delete_field_elastic_search(id) do
     Tesla.delete(client(), "#{@index_name}/_doc/#{id}")
   end
+
+  def search(author_name, tags) do
+    with {:ok, response} <- Tesla.get(client(), "#{@index_name}/_search/?q=author_name:#{author_name}+AND+tags:#{tags}"),
+         {:ok, %{"hits" => %{"hits" => results}}} <- Jason.decode(response.body) do
+      Enum.map(results, fn %{"_id" => id} -> id end)
+    else
+      _ -> []
+    end
+  end
+
 end
