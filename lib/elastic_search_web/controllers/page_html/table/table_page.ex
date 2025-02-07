@@ -1,7 +1,7 @@
 defmodule ElasticSearchWeb.PageHtml.TablePage do
   @moduledoc false
   use ElasticSearchWeb, :surface_live_view
-  alias Moon.Design.{Modal, Form, Form.Field, Form.Input, Button, Table, Table.Column, Search}
+  alias Moon.Design.{Modal, Form, Form.Field, Form.Input, Button, Table, Table.Column, Search, Dropdown}
 
   alias ElasticSearch.Schemas.Article
   alias ElasticSearch.Repository.ArticleRepository

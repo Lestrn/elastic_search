@@ -1,7 +1,15 @@
 <Button class="mb-3" variant="outline" on_click="set_open_insert_dialog">Insert new data</Button>
 <div class="flex flex-col gap-3 mb-3">
- <Search id="author-search" filter={@author_name_filter} on_keyup="change_author_name_filter" options={[]} prompt="Search by author name" /> 
- <Search id="tag-search" filter={@tag_filter} on_keyup="change_tag_filter" options={[]} prompt="Search by tags" /> 
+ <Search id="author-search" filter={@author_name_filter} on_keyup="change_author_name_filter" options={[]} prompt="Search by author name">       
+  <Dropdown id="author-dropdown" disabled>
+    <Dropdown.Trigger disabled />
+    </Dropdown> 
+ </Search> 
+ <Search id="tag-search" filter={@tag_filter} on_keyup="change_tag_filter" options={[]} prompt="Search by tags">
+       <Dropdown id="tag-dropdown" disabled>
+        <Dropdown.Trigger disabled />
+      </Dropdown> 
+  </Search> 
 </div>
 <Table items={field <- @fields} is_zebra_style row_gap="border-spacing-y-1">
   <Column name="id" label="Id">
