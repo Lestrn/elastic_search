@@ -12,13 +12,13 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
     ])
   end
 
-  def maybe_create_index() do
-    case Tesla.head(client(), "/#{@index_name}") do
+  def maybe_create_index(index \\ @index_name) do
+    case Tesla.head(client(), "/#{index}") do
       {:ok, %Tesla.Env{status: 200}} ->
-        IO.puts("Index #{@index_name} already exists. Skipping creation.")
+        IO.puts("Index #{index} already exists. Skipping creation.")
 
       {:ok, %Tesla.Env{status: 404}} ->
-        IO.puts("Index #{@index_name} does not exist. Creating...")
+        IO.puts("Index #{index} does not exist. Creating...")
 
         articles =
           %{
@@ -35,19 +35,19 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
           }
           |> Jason.encode!()
 
-        Tesla.put(client(), "/#{@index_name}", articles)
+        Tesla.put(client(), "/#{index}", articles)
 
       {:error, reason} ->
         IO.puts("Error checking index existence: #{inspect(reason)}")
     end
   end
 
-  def bulk_index_articles() do
+  def bulk_index_articles(index \\ @index_name) do
     bulk_data =
       ArticleRepository.fetch_articles()
       |> Enum.map(fn article ->
         [
-          %{"index" => %{"_index" => @index_name, "_id" => article.id}},
+          %{"index" => %{"_index" => index, "_id" => article.id}},
           %{
             author_name: article.author_name,
             status: article.status,
@@ -65,18 +65,18 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
       |> Enum.join("\n")
       |> Kernel.<>("\n")
 
-    Tesla.post(client(), "#{@index_name}/_bulk", bulk_data)
+    Tesla.post(client(), "#{index}/_bulk", bulk_data)
   end
 
-  def clear_elastic_search() do
-    Tesla.delete(client(), @index_name)
+  def clear_elastic_search(index \\ @index_name) do
+    Tesla.delete(client(), index)
   end
 
-  def create_field_elastic_search(id, attrs) do
-    Tesla.post(client(), "#{@index_name}/_doc/#{id}", attrs |> Jason.encode!())
+  def create_field_elastic_search(id, attrs, index \\ @index_name) do
+    Tesla.post(client(), "#{index}/_doc/#{id}", attrs |> Jason.encode!())
   end
 
-  def update_field_elastic_search(id, attrs) do
+  def update_field_elastic_search(id, attrs, index \\ @index_name) do
     request_body = [
       %{
         doc: attrs
@@ -84,15 +84,16 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
       |> Jason.encode!()
     ]
 
-    Tesla.post(client(), "#{@index_name}/_update/#{id}", request_body)
+    Tesla.post(client(), "#{index}/_update/#{id}", request_body)
   end
 
-  def delete_field_elastic_search(id) do
-    Tesla.delete(client(), "#{@index_name}/_doc/#{id}")
+  def delete_field_elastic_search(id, index \\ @index_name) do
+    Tesla.delete(client(), "#{index}/_doc/#{id}")
   end
 
-  def search(author_name, tags) do
-    with {:ok, response} <- Tesla.get(client(), "#{@index_name}/_search/?q=author_name:#{author_name}+AND+tags:#{tags}"),
+  def search(author_name, tags, index \\ @index_name) do
+    with {:ok, response} <-
+           Tesla.get(client(), "#{index}/_search?q=tags:#{URI.encode(tags)}+AND+author_name:#{URI.encode(author_name)}"),
          {:ok, %{"hits" => %{"hits" => results}}} <- Jason.decode(response.body) do
       Enum.map(results, fn %{"_id" => id} -> id end)
     else
@@ -100,4 +101,11 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
     end
   end
 
+  def get_article_by_id_elastic_search(id, index \\ @index_name) do
+    with {:ok, response} <- Tesla.get(client(), "#{index}/_doc/#{id}") do
+        Jason.decode(response.body)
+    else
+      _ -> {:error, :not_found}
+    end
+  end
 end
