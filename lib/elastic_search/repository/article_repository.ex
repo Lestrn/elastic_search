@@ -4,28 +4,33 @@ defmodule ElasticSearch.Repository.ArticleRepository do
   alias ElasticSearch.Repository.ApiElasticSearch
   import Ecto.Query
 
+  @index_name "article_index"
+
   def fetch_articles() do
     Article
     |> order_by(desc: :updated_at)
     |> Repo.all()
   end
 
-
   def get_article_by_id(id) do
     Repo.get(Article, id)
   end
 
-  def create_article(attrs) do
+  def create_article(attrs, index \\ @index_name) do
     %Article{}
     |> Article.changeset(attrs, true)
     |> Repo.insert()
     |> case do
-      {:ok, article} -> ApiElasticSearch.create_field_elastic_search(article.id, attrs)
-      {:error, changeset} -> {:error, changeset}
+      {:ok, article} ->
+        ApiElasticSearch.create_field_elastic_search(article.id, attrs, index)
+        article
+
+      {:error, changeset} ->
+        {:error, changeset}
     end
   end
 
-  def update_article(article_id, attrs) do
+  def update_article(article_id, attrs, index \\ @index_name) do
     case Repo.get(Article, article_id) do
       nil ->
         {:error, :not_found}
@@ -38,7 +43,8 @@ defmodule ElasticSearch.Repository.ArticleRepository do
         with {:ok, result} <- Repo.update(changeset) do
           ApiElasticSearch.update_field_elastic_search(
             article_id,
-            changeset.changes |> Map.put(:updated_at, result.updated_at)
+            changeset.changes |> Map.put(:updated_at, result.updated_at),
+            index
           )
 
           result
@@ -46,14 +52,14 @@ defmodule ElasticSearch.Repository.ArticleRepository do
     end
   end
 
-  def delete_article(article_id) do
+  def delete_article(article_id, index \\ @index_name) do
     case Repo.get(Article, article_id) do
       nil ->
         {:error, :not_found}
 
       article ->
         with {:ok, result} <- Repo.delete(article) do
-          ApiElasticSearch.delete_field_elastic_search(article_id)
+          ApiElasticSearch.delete_field_elastic_search(article_id, index)
           result
         end
     end
@@ -71,5 +77,4 @@ defmodule ElasticSearch.Repository.ArticleRepository do
     from(a in Article, where: a.id in ^ids)
     |> Repo.all()
   end
-
 end
