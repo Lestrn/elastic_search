@@ -6,11 +6,12 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :elastic_search, ElasticSearch.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "elastic_search_test#{System.get_env("MIX_TEST_PARTITION")}",
-  port: 5430,
+  username: System.get_env("DB_USERNAME") || "postgres",
+  password: System.get_env("DB_PASSWORD") || "postgres",
+  hostname: System.get_env("DB_HOST") || "localhost",
+  database:
+    System.get_env("TEST_DB_NAME") || "elastic_search_test#{System.get_env("MIX_TEST_PARTITION")}",
+  port: System.get_env("DB_PORT") || 5430,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 

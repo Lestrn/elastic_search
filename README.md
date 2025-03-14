@@ -1,5 +1,15 @@
 # ElasticSearch
 
+This project demonstrates how to integrate **Elasticsearch** with a **Phoenix (Elixir) application**, using **PostgreSQL** as the primary database. The application includes a page displaying a table of articles with the following attributes:
+
+- **Article Title**
+- **Author Name**
+- **Status** (Published/Unpublished)
+- **Tags**
+- **Label** (URL to the article)
+
+The application supports **CRUD operations** (Create, Read, Update, Delete) with **buttons and modals** for managing articles.
+
 To start your Phoenix server:
   * Run `docker compose up` to start db and elastic search
   * Run `mix setup` to install and setup dependencies
