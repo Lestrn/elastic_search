@@ -3,10 +3,11 @@ defmodule ElasticSearch.Repository.ApiElasticSearch do
   use Tesla
 
   @index_name "article_index"
+  @elastic_search_url  System.get_env("ELASTIC_HOST") || "http://localhost:9200/"
 
   def client do
     Tesla.client([
-      {Tesla.Middleware.BaseUrl, "http://localhost:9200/"},
+      {Tesla.Middleware.BaseUrl, @elastic_search_url},
       {Tesla.Middleware.Headers,
        [{"content-type", "application/json"}, {"X-elastic-product", "Elasticsearch"}]}
     ])
